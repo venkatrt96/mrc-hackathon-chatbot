@@ -1,0 +1,62 @@
+.AlertHolder {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .Alert {
+        width: 500px;
+        border-radius: 5px;
+        position: absolute;
+        background: white;
+        padding: 20px 30px;
+        box-sizing: border-box;
+        .AlertHeading {
+            display: flex;
+            flex-flow: column;
+            .error {
+                font-family: 'Lato', 'Medium';
+                font-size: 18px;
+                color: #EA1B32;
+                padding: 10px 0;
+                font-weight: bold;
+            }
+            .warning {
+                font-family: 'Lato', 'Medium';
+                font-size: 18px;
+                color: #f5821f;
+                padding: 10px 0;
+                font-weight: bold;
+            }
+            .info {
+                font-family: 'Lato', 'Medium';
+                font-size: 18px;
+                color: #00ab88;
+                padding: 10px 0;
+                font-weight: bold;
+            }
+            .Message {
+                font-family: 'Lato', 'Bold';
+                padding: 10px 0;
+                color: #53565a;
+                font-size: 16px;
+            }
+        }
+        .AlertButtonHolder {            
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0;
+            button {                 
+                color: #53565a;
+                outline: none;
+                font-size: 14px;
+                padding: 10px 30px;
+                cursor: pointer;                
+                border: 0;
+                box-shadow: 0 3px 5px 0 rgba(0, 0, 0, .1);
+                background: white;
+            }
+        }
+    }
+}

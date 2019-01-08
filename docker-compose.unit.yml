@@ -1,0 +1,5 @@
+version: '3.3'
+services:
+  web:
+    image: dtr.${DOCKER_DOMAIN}/${DTR_ORG_NAME}/${DTR_REPO_NAME}:${BUILD_SOURCEVERSION}
+    command: sh -c "cd ../ && yarn test"

@@ -1,0 +1,34 @@
+.Block {
+    width: 168px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #707070;
+    background: white;
+    margin: 0px 16px 0 0;
+    border-radius: 5px;
+    .BlockIcon {
+        height: 36px;
+        width: 36px;
+        padding: 10px 10px;
+    }
+    .BlockContent {
+        display: flex;
+        flex-flow: column;
+        .key {
+            font-family: 'Lato', 'Regular';
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .value {
+            font-family: 'Lato', 'Medium';
+            font-size: 18px;
+        }
+    }    
+}
+
+.Block:last-child {
+    margin: 0;
+}

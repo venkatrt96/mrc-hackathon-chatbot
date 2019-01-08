@@ -1,0 +1,39 @@
+.CustomTableHolder {
+    margin: 25px 0;
+    padding: 0 0 50px 0;
+    border-radius: 5px;
+    background: white;
+}
+
+.TableHeading {
+    background: white;
+    border-radius: 5px 5px 0 0;
+    padding: 18px 30px;
+    span {
+        font-family: 'Lato', 'Medium';
+        font-size: 18px;
+        color: #707070;
+    }
+}
+
+.CustomTable {
+    width: 100%;
+    border: 0;
+    border-collapse: collapse;
+    th {
+        font-family: 'Lato', 'Bold';
+        background: rgba(112, 112, 112, .2);
+        color: #707070;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 12px;
+        text-align: left;
+    }
+    td {
+        font-family: 'Lato', 'Regular';
+        background: white;
+        color: #707070;
+        padding: 12px 30px;
+        border-bottom: 1px solid rgba(112, 112, 112, .5);
+    }
+}

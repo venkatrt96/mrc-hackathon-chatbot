@@ -1,0 +1,26 @@
+{
+  "apps": [
+    {
+      "name": "chatbot",
+      "script": "api/server.js",
+      "watch": true,
+      "instances": 1,
+      "ignore_watch": [
+        "logs",
+        "node_modules",
+        ".tmp",
+        ".idea",
+        ".vagrant",
+        ".git",
+        "mb.log",
+        "mb1.log"
+      ],
+      "env": {
+        "DEBUG": "fetch:request"
+      },
+      "log_file": "./logs/Chatbot.log",
+      "out_file": "./logs/Chatbot.log",
+      "err_file": "./logs/Chatbot.log"
+    }
+  ]
+}

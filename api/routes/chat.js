@@ -97,7 +97,7 @@ router.post('/message/fetch', (req, res) => {
   const { id } = req.body;
   getChatMessagesById(client, id).then((messages) => {
     const chatMessages = (isEqual(typeof messages, 'object') && messages) || [];
-    console.log('message', id, chatMessages);
+    // console.log('message', id, chatMessages);
     res.json({
       messages: chatMessages,
       status: 'OK',

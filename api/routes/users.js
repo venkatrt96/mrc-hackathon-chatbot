@@ -14,11 +14,11 @@ router.get('/me', auth.protected, (req, res) => {
     }
   });
   let groupName = '';
-  console.log(matchedGroupList);
+  // console.log(matchedGroupList);
   if (matchedGroupList && matchedGroupList[0] && matchedGroupList[0].displayName) {
     const matchedGroupName = matchedGroupList[0].displayName;
     groupName = matchedGroupName.split('-')[1];
-    console.log(groupName);
+    // console.log(groupName);
   }
   res.json({
     name,

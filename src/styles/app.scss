@@ -3,6 +3,7 @@
 @import './components/Loader';
 @import './components/Alert';
 @import './components/DarkOverlay.scss';
+@import './components/Chat.scss';
 
 html, body, #app {
     height: 100%;
@@ -16,7 +17,6 @@ html, body, #app {
     flex-flow: column;
     height: 100%;
     width: 100%;    
-    min-width: 1170px;
     position: relative;   
     .Header {
         display: flex;
@@ -43,28 +43,26 @@ html, body, #app {
         min-height: 0;
         display: flex;
         flex-flow: column;
-        align-items: center;
+        // align-items: center;
         background: #F3F2F7;
         overflow-y: auto;
         overflow-x: hidden;
         position: relative; 
-        .Logs {
-            width: 1088px;
-            .LogHeading {
-                display: flex;
-                flex-flow: wrap;
-                justify-content: space-between;
-                align-items: baseline;
-                margin: 15px 0;          
-                span {
-                    line-height: 26px;
-                }
-                .Title {
-                    font-family: 'Lato', 'Medium';
-                    color: #707070;
-                    font-size: 20px;
-                }        
+
+        .Heading {
+            display: flex;
+            flex-flow: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 15px 42px;          
+            span {
+                line-height: 26px;
             }
+            .Title {
+                font-family: 'Lato', 'Medium';
+                color: #00b4d2;
+                font-size: 20px;
+            }        
         }
 
         .BlocksHolder {
@@ -78,6 +76,23 @@ html, body, #app {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .ActiveUsersHolder {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 42px;
+
+            .ActiveUsersHeading {
+                font-family: 'Lato', 'Regular';
+                padding: 10px 0;
+            }
+            .ActiveUsers {
+                display: flex;
+                justify-content: space-between;
+                width: 500px;
+                padding: 10px 0;
+            }
         }
     }    
 }

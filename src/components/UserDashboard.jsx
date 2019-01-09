@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
 import isEqual from 'lodash/isEqual';
+import isObject from 'lodash/isObject';
+import isString from 'lodash/isString';
+import ChatIcon from '@material-ui/icons/ChatBubble';
+import ChatClose from '@material-ui/icons/Close';
+import InsertEmoticon from '@material-ui/icons/InsertEmoticon';
 import { socket } from 'utils';
+import ChatLogo from 'images/ChatbotIcon.png';
 
 class UserDashboard extends React.PureComponent {
   constructor() {
@@ -10,6 +16,8 @@ class UserDashboard extends React.PureComponent {
     this.state = {
       message: '',
       messages: [],
+      chatOpen: false,
+      help: false,
     };
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -29,6 +37,12 @@ class UserDashboard extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     this.updateSocket(nextProps);
     this.updateState(nextProps);
+  }
+
+  componentDidUpdate() {
+    if (this.chatLogHolder) {
+      this.chatLogHolder.scrollTop = this.chatLogHolder.scrollHeight;
+    }
   }
 
   updateState(props) {
@@ -56,6 +70,12 @@ class UserDashboard extends React.PureComponent {
         },
         message,
       });
+      if (!this.state.help) {
+        this.props.fetchBotResponse({
+          sessionID: id,
+          userInput: message,
+        });
+      }
       this.setState({ message: '' });
     }
   }
@@ -65,25 +85,110 @@ class UserDashboard extends React.PureComponent {
     this.setState({ message });
   }
 
-  render() {
-    const { username } = this.props;
-    const { messages, message } = this.state;
+  payloadResponse(reply) { // eslint-disable-line
+    const { payloadType, payloadContent } = reply; // eslint-disable-line
+    const { id, username } = this.props;
+    const options = map((payloadContent[payloadContent.kind].values), (option, index) => {
+      return (
+        <button
+          key={index}
+          onClick={() => {
+            this.props.sendMessage({
+              sender: {
+                id,
+                username,
+              },
+              message: option[option.kind],
+            });
+            if (!this.state.help) {
+              this.props.fetchBotResponse({
+                sessionID: id,
+                userInput: option[option.kind],
+              });
+            }
+          }}
+        >
+          {option[option.kind]}
+        </button>
+      );
+    });
     return (
-      <div>
-        <div>
-          {map(messages, (messageObject, key) => {
-            return (
-              <div key={key}>
-                <span>
-                  {messageObject.sender && messageObject.sender.username}
-                  {' : '}
-                </span>
-                <span>{messageObject.message}</span>
-              </div>
-            );
-          })}
-          <span>{username}</span>
-          {username && (
+      <div className="ChatTextFromBotOptsHolder">
+        {isEqual(payloadType[payloadType.kind], 'collection') && options}
+      </div>
+    );
+  }
+
+  chatlog() {
+    const { messages } = this.state;
+    return (
+      map((messages), (value, index) => {
+        const { sender, message } = value;
+        const { username } = sender;
+        const userTextFlag = !isEqual(username, 'BOT') && !username.includes('SERVICER');
+        const payloadReceivedFlag = isEqual(username, 'BOT') && isObject(message);
+        const textReceivedFlag = (username.includes('SERVICER') || isEqual(username, 'BOT'))
+        && isString(message);
+        return (
+          <div key={index} className="ChatLog">
+            {userTextFlag
+            && (
+            <span key={`${index}_${value}_Bot`} className="ChatTextFromUser">
+              {message}
+            </span>
+            )
+          }
+            {payloadReceivedFlag
+            && (
+            <div key={`${index}_${value}_Bot`} className="ChatTextFromBotOpts">
+              {this.payloadResponse(message)}
+            </div>
+            )
+          }
+            {textReceivedFlag
+            && (
+            <span key={`${index}_${value}_User`} className="ChatTextFromBot">
+              {message}
+            </span>
+            )
+          }
+          </div>
+        );
+      })
+    );
+  }
+
+  chatWindow() {
+    const { username } = this.props;
+    const { message } = this.state;
+    return (
+      <div className="ChatHolder">
+        <div className="ChatHolderHeader">
+          <div className="ChatImg">
+            <img alt="No ChatLogo" src={ChatLogo} />
+          </div>
+          <span className="ChatName">Cooper Bot</span>
+        </div>
+        <div
+          ref={(chatLogHolder) => { this.chatLogHolder = chatLogHolder; }}
+          className="ChatLogHolder"
+        >
+          {this.chatlog()}
+        </div>
+        {/* {map(messages, (messageObject, key) => {
+          return (
+            <div key={key}>
+              <span>
+                {messageObject.sender && messageObject.sender.username}
+                {' : '}
+              </span>
+              <span>{messageObject.message}</span>
+            </div>
+          );
+        })} */}
+        <div className="ChatInput">
+          <div className="InputControls">
+            {username && (
             <input
               onChange={this.handleTextChange}
               onKeyPress={this.handleKeyPress}
@@ -91,7 +196,38 @@ class UserDashboard extends React.PureComponent {
               type="text"
               value={message}
             />
-          )}
+            )}
+
+          </div>
+          <div className="AddOns">
+            <InsertEmoticon className="EmoticonButton" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div className="ChatBot">
+        {this.state.chatOpen && this.chatWindow()}
+        <div className="ChatBotIconHolder">
+          <button
+            className="ChatButton"
+            onClick={() => {
+              this.setState({
+                chatOpen: !this.state.chatOpen,
+              });
+            }}
+          >
+            {this.state.chatOpen ? <ChatClose />
+              : (
+                <div>
+                  {this.props.unreadTexts > 0 && <span className="unread">{this.props.unreadTexts}</span>}
+                  <ChatIcon />
+                </div>
+              )}
+          </button>
         </div>
       </div>
     );
@@ -101,10 +237,12 @@ class UserDashboard extends React.PureComponent {
 export default UserDashboard;
 
 UserDashboard.propTypes = {
+  fetchBotResponse: PropTypes.func,
   fetchMessages: PropTypes.func,
   id: PropTypes.string,
   joinChat: PropTypes.func,
   messages: PropTypes.array, // eslint-disable-line
   sendMessage: PropTypes.func,
+  unreadTexts: PropTypes.number,
   username: PropTypes.string,
 };

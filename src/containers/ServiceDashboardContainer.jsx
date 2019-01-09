@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
     groupName: state.accountReducer.groupName,
     messages: state.chatReducer.messages,
     users: state.chatReducer.users,
+    unreadTexts: state.dialogflowReducer.unreadTexts,
   };
 };
 

@@ -35,6 +35,9 @@ class Dashboard extends React.PureComponent {
         </div>
 
         <div className="LogContainer">
+          <div className="Heading">
+            <span className="Title">{`Welcome ${name}`}</span>
+          </div>
           {isEqual(groupName, 'SERVICE')
           && email && name && this.state.socketConnected
           && (<ServiceDashboardContainer />)}

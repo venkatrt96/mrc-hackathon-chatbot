@@ -3,6 +3,7 @@ const api = require('./api');
 const healthCheck = require('./healthCheck');
 const chat = require('./chat');
 const users = require('./users');
+const dialogflow = require('./dialogflow');
 
 exports.bind = (app) => {
   app.use('/', login);
@@ -10,4 +11,5 @@ exports.bind = (app) => {
   app.use('/ping', healthCheck);
   app.use('/api/chat', chat);
   app.use('/api/users', users);
+  app.use('/api/dialogflow', dialogflow);
 };

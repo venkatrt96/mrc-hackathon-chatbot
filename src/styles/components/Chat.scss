@@ -1,0 +1,213 @@
+.ChatBot {
+    z-index: 2;
+    width: 350px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 30px;
+    margin-bottom: 25px;
+    color: #53565A;
+    font-family: 'Lato', sans-serif;
+}
+  
+.ChatBotIconHolder {
+    display: flex;
+    flex-flow: row;
+    margin-top: 5px;
+}
+.ChatButton {
+    padding: 10px 15px;
+    margin-left: auto;
+    border-radius: 10px;
+    background: #00B4D2;
+    color: white;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    transition-duration: .5s;
+  
+    svg {
+        color: white !important;
+    }
+  
+    .unread {
+        background: #1b6c92;
+        padding: 3px 5px;
+        border-radius: 50%;
+        position: absolute;
+        margin-left: 12px;
+        margin-top: -4px;
+        font-size: 9px;
+    }
+}
+.ChatButton:hover {
+    color: #EEEEEF;
+    opacity: 0.8;
+}
+  
+.ChatHolder {
+    height: 400px;
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    display: flex;
+    flex-flow: column;
+    background: #FFFFFF;
+}
+.ChatHolderHeader {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    padding: 5px 0px;
+    background: white;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #EEEEEF;
+  
+    > * {
+        padding: 20px 5px;
+    }
+}
+.ChatImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+  
+    img {
+        height: 50px;
+        width: 50px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+    }
+}
+.ChatName {
+    font-weight: 600;
+    margin: auto 0;
+    color: #6E6E6E;
+}
+  
+.ChatLogHolder {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+.ChatLog {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: baseline;
+    padding: 0 10px;
+}
+.ChatTextFromBot {
+    border-radius: 15px 15px 15px 0;
+    background: #EEEEEF;
+    padding: 10px;
+    margin: 5px 0;
+}
+.ChatTextFromUser {
+    border-radius: 15px 15px 0 15px;
+    background: #00B4D2;
+    color: white;
+    padding: 10px;
+    margin: 5px 0 5px auto;
+}
+.ChatTextFromBotOpts {
+    border-radius: 15px 15px 15px 0;
+    background: #EEEEEF;
+    margin: 5px 0;
+    display: flex;
+    flex-flow: column; 
+    width: 90%; 
+  
+    .ChatTextFromBotOptsHolder {
+        padding: 10px;
+        
+        > span {
+            padding: 5px;
+        }
+    }
+  
+    button {
+        width: 100%; 
+        background: transparent; 
+        border: 0; 
+        padding: 5px 5px;
+        text-align: left;
+        outline: none;
+        cursor: pointer;
+        transition-duration: .5s;
+        border-radius: 5px;
+        border: 1px solid white;
+    }
+  
+    button:hover {
+      background: #6E6E6E;
+      color: white;
+    }
+}
+  
+.ChatInput {
+    margin-top: auto;
+    border-top: 1px solid #EEEEEF;
+    padding: 5px 0;
+  
+    input {
+        border: 0;
+        width: 100%;
+        outline: none;
+        
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+}
+  
+.InputControls {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    
+    input {
+        font-size: 15px;
+    }
+  
+    > * {
+        padding: 10px;
+    }
+  
+    .SendButton {
+        border: 0;
+        cursor: pointer;
+        background: transparent;
+        outline: none;
+        
+        > svg {
+            color: #888B8D !important;
+        }
+    }
+}
+  
+.AddOns {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    padding: 5px;
+  
+    .EmoticonButton {
+        padding: 0 1px;
+        margin: 0 1px;
+        cursor: pointer;
+        color: #888B8D !important;
+    }
+  
+    .FAQs {
+        margin-left: auto;
+        cursor: pointer;
+        border: 0;
+        border-radius: 10px;
+        background: #6E6E6E;
+        outline: none;
+        padding: 5px 8px;
+        color: white;
+    }
+}
+  

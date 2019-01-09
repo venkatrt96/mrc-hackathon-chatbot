@@ -19,27 +19,28 @@ class ServiceDashboard extends React.PureComponent {
 
   componentDidMount() {
     this.props.fetchUsers();
-    this.updateUsers(this.props);
-    this.updateState();
+    this.updateState(this.props);
+    this.updateSocket();
   }
 
   componentWillReceiveProps(nextProps) {
-    this.updateUsers(nextProps);
-    this.updateState();
-    if (this.state.receiverId) {
-      this.props.fetchMessages(this.state.receiverId);
-    }
+    this.updateState(nextProps);
+    this.updateSocket();
   }
 
-  updateUsers(props) {
+  updateState(props) {
+    console.log('PROPS:', props);
     this.setState({
       users: props.users,
+      messages: props.messages,
     });
   }
 
-  updateState() {
+  updateSocket() {
     socket.on('chatUsers', (data) => {
-      this.setState({ users: data.users });
+      if (data && data.users) {
+        this.setState({ users: data.users });
+      }
     });
   }
 
@@ -73,6 +74,11 @@ class ServiceDashboard extends React.PureComponent {
             return (
               <div key={key}>
                 <button onClick={() => {
+                  if (!isEqual(receiverId, user.id)) {
+                    socket.emit('unsubscribe', receiverId);
+                  }
+                  this.props.fetchMessages(user.id);
+
                   this.setState({
                     receiverId: user.id,
                   });
@@ -94,23 +100,6 @@ class ServiceDashboard extends React.PureComponent {
             );
           })}
 
-          {receiverId && (
-          <button onClick={() => {
-            this.props.sendMessage({
-              sender: {
-                id: receiverId,
-                username: `SERVICER-${this.props.username}`,
-              },
-              message: 'PING',
-            });
-          }}
-          >
-            Ping
-            {' '}
-            {receiverId}
-          </button>
-          )
-          }
           {receiverId && map(messages, (messageObject, key) => {
             return (
               <div key={key}>
@@ -142,6 +131,8 @@ export default ServiceDashboard;
 ServiceDashboard.propTypes = {
   fetchMessages: PropTypes.func,
   fetchUsers: PropTypes.func,
+  messages: PropTypes.array, // eslint-disable-line
   sendMessage: PropTypes.func,
   username: PropTypes.string,
+  users: PropTypes.array, // eslint-disable-line
 };

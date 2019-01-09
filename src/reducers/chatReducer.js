@@ -3,6 +3,7 @@ const defaultState = {
   messagesLoading: false,
   messagesLoaded: false,
   messagesError: '',
+  users: [],
 };
 
 export const chatReducer = (state = defaultState, action) => {
@@ -29,6 +30,11 @@ export const chatReducer = (state = defaultState, action) => {
         messagesLoaded: true,
         messages: [],
         messagesError: action.payload,
+      });
+
+    case 'FETCH_USERS_FULFILLED':
+      return Object.assign({}, state, {
+        users: action.payload.users,
       });
 
     default:

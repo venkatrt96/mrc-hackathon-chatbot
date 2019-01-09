@@ -20,22 +20,24 @@ class UserDashboard extends React.PureComponent {
       id: this.props.id,
       username: this.props.username,
     });
-    this.updateMessages(this.props);
-    this.updateState(this.props);
+    if (this.props.id) {
+      this.props.fetchMessages(this.props.id);
+    }
+    this.updateSocket(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.updateMessages(nextProps);
+    this.updateSocket(nextProps);
     this.updateState(nextProps);
   }
 
-  updateMessages(props) {
+  updateState(props) {
     this.setState({
       messages: props.messages,
     });
   }
 
-  updateState(payload) { // eslint-disable-line
+  updateSocket(payload) { // eslint-disable-line
     socket.emit('subscribe', payload.id);
 
     socket.on('send', (data) => {
@@ -99,8 +101,10 @@ class UserDashboard extends React.PureComponent {
 export default UserDashboard;
 
 UserDashboard.propTypes = {
+  fetchMessages: PropTypes.func,
   id: PropTypes.string,
   joinChat: PropTypes.func,
+  messages: PropTypes.array, // eslint-disable-line
   sendMessage: PropTypes.func,
   username: PropTypes.string,
 };

@@ -26,8 +26,8 @@ export const errorMessagesFetching = (payload) => {
 export const fetchMessages = (payload) => {
   return (dispatch) => {
     dispatch(fetchMessagesInit());
-    axios.get(`/api/chat/message/${payload}`).then((res) => {
-      socket.emit('message', res.data.messages);
+    axios.post('/api/chat/message/fetch', { id: payload }).then((res) => {
+      // socket.emit('message', res.data.messages);
       dispatch(fetchMessagesFulfilled(res.data));
     }).catch(() => {
       dispatch(errorMessagesFetching('Error Fetching Messages'));
@@ -36,11 +36,18 @@ export const fetchMessages = (payload) => {
   };
 };
 
+export const fetchUsersFulfilled = (payload) => {
+  return {
+    type: 'FETCH_USERS_FULFILLED',
+    payload,
+  };
+};
+
 export const fetchUsers = () => {
   return (dispatch) => {
     axios.get('/api/chat/users').then((res) => {
-      console.log(res.data);
-      socket.emit('updateUsers', res.data);
+      // socket.emit('updateUsers', res.data);
+      dispatch(fetchUsersFulfilled(res.data));
     }).catch(() => {
       dispatch(displayAlert('Error Fetching Users', 'error'));
     });

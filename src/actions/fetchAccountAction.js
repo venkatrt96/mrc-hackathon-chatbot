@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { fetchMessages } from './chatAction';
 
 export const fetchAccountFulfilled = (payload) => {
   return {
@@ -14,9 +13,6 @@ export const fetchAccount = () => {
       (response) => {
         const userDetails = response.data;
         dispatch(fetchAccountFulfilled(userDetails));
-        if (userDetails && userDetails.email) {
-          dispatch(fetchMessages(userDetails.email));
-        }
       },
     );
   };

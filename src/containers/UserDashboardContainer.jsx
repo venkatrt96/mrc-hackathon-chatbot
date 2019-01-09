@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import UserDashboard from 'components/UserDashboard';
-import { joinChat, sendMessage, fetchUsers } from 'actions/chatAction';
+import {
+  joinChat, sendMessage, fetchUsers, fetchMessages,
+} from 'actions/chatAction';
 
 const mapStateToProps = (state) => {
   return {
@@ -16,6 +18,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchUsers: () => dispatch(fetchUsers()),
     joinChat: payload => dispatch(joinChat(payload)),
     sendMessage: payload => dispatch(sendMessage(payload)),
+    fetchMessages: payload => dispatch(fetchMessages(payload)),
   };
 };
 

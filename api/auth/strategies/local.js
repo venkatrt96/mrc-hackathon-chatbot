@@ -6,7 +6,7 @@ const defaultUser = {
     userPrincipalName: 'mrcooper@007.com',
     groups: [{
       '@odata.type': '#microsoft.graph.group',
-      displayName: 'CHATBOT-SERVICE',
+      displayName: 'CHATBOT-USER',
       mailEnabled: false,
       onPremisesSyncEnabled: null,
     }],

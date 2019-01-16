@@ -104,29 +104,31 @@ class ServiceDashboard extends React.PureComponent {
         const payloadReceivedFlag = isEqual(username, 'BOT') && isObject(message);
         const textReceivedFlag = (username.includes('SERVICER') || isEqual(username, 'BOT'))
         && isString(message);
+        const alert = isObject(message) && message.type && isEqual(message.type, 'ALERT');
         return (
           <div key={index} className="ChatLog">
             {userTextFlag
             && (
-            <span key={`${index}_${value}_Bot`} className="ChatTextFromUser">
+            <span key={`${index}_${value}_Bot`} className="ChatTextFromBot">
               {message}
             </span>
             )
           }
             {payloadReceivedFlag
             && (
-            <div key={`${index}_${value}_Bot`} className="ChatTextFromBotOpts">
+            <div key={`${index}_${value}_Bot`} className="ChatTextFromBotOpts ChatTextFromBotOptsInverse">
               {this.payloadResponse(receiverId, message)}
             </div>
             )
           }
             {textReceivedFlag
             && (
-            <span key={`${index}_${value}_User`} className="ChatTextFromBot">
+            <span key={`${index}_${value}_User`} className="ChatTextFromUser">
               {message}
             </span>
             )
           }
+            {alert && <span key={`${index}_${value}_User`} className="ChatTextAlert">{message.content}</span>}
           </div>
         );
       })
@@ -142,7 +144,7 @@ class ServiceDashboard extends React.PureComponent {
           <div className="ChatImg">
             <img alt="No ChatLogo" src={ChatLogo} />
           </div>
-          <span className="ChatName">Cooper Bot</span>
+          <span className="ChatName">Pay Bot</span>
         </div>
         <div
           ref={(chatLogHolder) => { this.chatLogHolder = chatLogHolder; }}
@@ -200,6 +202,17 @@ class ServiceDashboard extends React.PureComponent {
 
                   socket.on('send', (data) => {
                     this.setState({ messages: data });
+                  });
+
+                  this.props.sendMessage({
+                    sender: {
+                      id: user.id,
+                      username: `SERVICER-${this.props.username}`,
+                    },
+                    message: {
+                      type: 'ALERT',
+                      content: `******${this.props.username} has joined the chat******`,
+                    },
                   });
                 }}
                 >

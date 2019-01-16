@@ -1,6 +1,6 @@
 .ChatBot {
     z-index: 2;
-    width: 350px;
+    width: 480px;
     position: fixed;
     bottom: 0;
     right: 0;
@@ -46,7 +46,7 @@
 }
   
 .ChatHolder {
-    height: 400px;
+    height: 500px;
     width: 100%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 10px;
@@ -98,51 +98,69 @@
     padding: 0 10px;
 }
 .ChatTextFromBot {
-    border-radius: 15px 15px 15px 0;
+    border-radius: 20px 20px 20px 20px;
     background: #EEEEEF;
-    padding: 10px;
+    padding: 10px 20px;
+    box-sizing: border-box;
     margin: 5px 0;
 }
 .ChatTextFromUser {
-    border-radius: 15px 15px 0 15px;
+    border-radius: 20px 20px 20px 20px;
     background: #00B4D2;
     color: white;
-    padding: 10px;
+    padding: 10px 20px;
+    box-sizing: border-box;
     margin: 5px 0 5px auto;
 }
 .ChatTextFromBotOpts {
-    border-radius: 15px 15px 15px 0;
-    background: #EEEEEF;
+    border-radius: 20px 20px 20px 20px;
     margin: 5px 0;
     display: flex;
     flex-flow: column; 
     width: 90%; 
   
-    .ChatTextFromBotOptsHolder {
-        padding: 10px;
-        
+    .ChatTextFromBotOptsHolder {       
         > span {
             padding: 5px;
         }
     }
   
     button {
-        width: 100%; 
-        background: transparent; 
-        border: 0; 
-        padding: 5px 5px;
+        width: auto;
+        background: white; 
+        color: #00B4D2;
+        padding: 10px 20px;
         text-align: left;
         outline: none;
         cursor: pointer;
         transition-duration: .5s;
-        border-radius: 5px;
-        border: 1px solid white;
+        border-radius: 20px;
+        border: 1px solid #00b4d2;
+        margin: 5px;
     }
   
     button:hover {
-      background: #6E6E6E;
+      background: #00b4d2;
       color: white;
     }
+}
+.ChatTextFromBotOptsInverse {    
+    margin: 5px 0 5px auto;
+    .ChatTextFromBotOptsHolder {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    button {
+        width: auto;
+        background: white;
+        color: #00b4d2;
+    }
+}
+
+.ChatTextAlert {
+    color: #53565A;
+    margin: 5px auto;
 }
   
 .ChatInput {

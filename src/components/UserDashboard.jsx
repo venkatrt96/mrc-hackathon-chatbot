@@ -17,7 +17,6 @@ class UserDashboard extends React.PureComponent {
       message: '',
       messages: [],
       chatOpen: false,
-      help: false,
     };
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -31,6 +30,16 @@ class UserDashboard extends React.PureComponent {
     if (this.props.id) {
       this.props.fetchMessages(this.props.id);
     }
+
+    // Trigger Dialogflow
+    this.props.fetchBotResponse({
+      sessionID: this.props.id,
+      userInput: 'Hi',
+    });
+    this.props.fetchBotResponse({
+      sessionID: this.props.id,
+      userInput: 'I am facing an issue',
+    });
     this.updateSocket(this.props);
   }
 
@@ -70,7 +79,7 @@ class UserDashboard extends React.PureComponent {
         },
         message,
       });
-      if (!this.state.help) {
+      if (!this.props.help) {
         this.props.fetchBotResponse({
           sessionID: id,
           userInput: message,
@@ -100,7 +109,7 @@ class UserDashboard extends React.PureComponent {
               },
               message: option[option.kind],
             });
-            if (!this.state.help) {
+            if (!this.props.help) {
               this.props.fetchBotResponse({
                 sessionID: id,
                 userInput: option[option.kind],
@@ -129,9 +138,10 @@ class UserDashboard extends React.PureComponent {
         const payloadReceivedFlag = isEqual(username, 'BOT') && isObject(message);
         const textReceivedFlag = (username.includes('SERVICER') || isEqual(username, 'BOT'))
         && isString(message);
+        const alert = isObject(message) && message.type && isEqual(message.type, 'ALERT');
         return (
           <div key={index} className="ChatLog">
-            {userTextFlag
+            {userTextFlag && !alert
             && (
             <span key={`${index}_${value}_Bot`} className="ChatTextFromUser">
               {message}
@@ -145,13 +155,14 @@ class UserDashboard extends React.PureComponent {
             </div>
             )
           }
-            {textReceivedFlag
+            {textReceivedFlag && !alert
             && (
             <span key={`${index}_${value}_User`} className="ChatTextFromBot">
               {message}
             </span>
             )
           }
+            {alert && <span key={`${index}_${value}_User`} className="ChatTextAlert">{message.content}</span>}
           </div>
         );
       })
@@ -167,7 +178,7 @@ class UserDashboard extends React.PureComponent {
           <div className="ChatImg">
             <img alt="No ChatLogo" src={ChatLogo} />
           </div>
-          <span className="ChatName">Cooper Bot</span>
+          <span className="ChatName">Pay Bot</span>
         </div>
         <div
           ref={(chatLogHolder) => { this.chatLogHolder = chatLogHolder; }}
@@ -239,6 +250,7 @@ export default UserDashboard;
 UserDashboard.propTypes = {
   fetchBotResponse: PropTypes.func,
   fetchMessages: PropTypes.func,
+  help: PropTypes.bool,
   id: PropTypes.string,
   joinChat: PropTypes.func,
   messages: PropTypes.array, // eslint-disable-line

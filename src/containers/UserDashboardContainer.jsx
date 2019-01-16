@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
     messages: state.chatReducer.messages,
     unreadTexts: state.dialogflowReducer.unreadTexts,
     dialogflowResponse: state.dialogflowReducer.dialogflowResponse,
+    help: state.dialogflowReducer.help,
   };
 };
 

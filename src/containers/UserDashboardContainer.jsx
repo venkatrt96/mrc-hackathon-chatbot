@@ -14,6 +14,8 @@ const mapStateToProps = (state) => {
     unreadTexts: state.dialogflowReducer.unreadTexts,
     dialogflowResponse: state.dialogflowReducer.dialogflowResponse,
     help: state.dialogflowReducer.help,
+    lastTransactionView: state.miscReducer.lastTransactionView,
+    passwordResetView: state.miscReducer.passwordResetView,
   };
 };
 

@@ -2,11 +2,11 @@ const passport = require('passport');
 
 const defaultUser = {
   body: {
-    displayName: 'James Bond',
-    userPrincipalName: 'mrcooper@007.com',
+    displayName: 'Rajnikanth',
+    userPrincipalName: 'mrcooper@rajnikanth.com',
     groups: [{
       '@odata.type': '#microsoft.graph.group',
-      displayName: 'CHATBOT-USER',
+      displayName: 'CHATBOT-SERVICE',
       mailEnabled: false,
       onPremisesSyncEnabled: null,
     }],

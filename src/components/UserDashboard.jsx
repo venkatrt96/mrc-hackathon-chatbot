@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import map from 'lodash/map';
 import isEqual from 'lodash/isEqual';
-import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
-import ChatIcon from '@material-ui/icons/ChatBubble';
-import ChatClose from '@material-ui/icons/Close';
-import InsertEmoticon from '@material-ui/icons/InsertEmoticon';
+import Chat from 'components/common/Chat';
 import { socket } from 'utils';
-import ChatLogo from 'images/ChatbotIcon.png';
+import Table from 'components/common/Table';
+import MrCooperLogo from '../images/logoWhite.png';
 
 class UserDashboard extends React.PureComponent {
   constructor() {
@@ -38,7 +34,7 @@ class UserDashboard extends React.PureComponent {
     });
     this.props.fetchBotResponse({
       sessionID: this.props.id,
-      userInput: 'I am facing an issue',
+      userInput: 'i have a Payment related Issue',
     });
     this.updateSocket(this.props);
   }
@@ -46,12 +42,6 @@ class UserDashboard extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     this.updateSocket(nextProps);
     this.updateState(nextProps);
-  }
-
-  componentDidUpdate() {
-    if (this.chatLogHolder) {
-      this.chatLogHolder.scrollTop = this.chatLogHolder.scrollHeight;
-    }
   }
 
   updateState(props) {
@@ -94,152 +84,89 @@ class UserDashboard extends React.PureComponent {
     this.setState({ message });
   }
 
-  payloadResponse(reply) { // eslint-disable-line
-    const { payloadType, payloadContent } = reply; // eslint-disable-line
-    const { id, username } = this.props;
-    const options = map((payloadContent[payloadContent.kind].values), (option, index) => {
-      return (
-        <button
-          key={index}
-          onClick={() => {
-            this.props.sendMessage({
-              sender: {
-                id,
-                username,
-              },
-              message: option[option.kind],
-            });
-            if (!this.props.help) {
-              this.props.fetchBotResponse({
-                sessionID: id,
-                userInput: option[option.kind],
-              });
-            }
-          }}
-        >
-          {option[option.kind]}
-        </button>
-      );
-    });
-    return (
-      <div className="ChatTextFromBotOptsHolder">
-        {isEqual(payloadType[payloadType.kind], 'collection') && options}
-      </div>
-    );
-  }
-
-  chatlog() {
-    const { messages } = this.state;
-    return (
-      map((messages), (value, index) => {
-        const { sender, message } = value;
-        const { username } = sender;
-        const userTextFlag = !isEqual(username, 'BOT') && !username.includes('SERVICER');
-        const payloadReceivedFlag = isEqual(username, 'BOT') && isObject(message);
-        const textReceivedFlag = (username.includes('SERVICER') || isEqual(username, 'BOT'))
-        && isString(message);
-        const alert = isObject(message) && message.type && isEqual(message.type, 'ALERT');
-        return (
-          <div key={index} className="ChatLog">
-            {userTextFlag && !alert
-            && (
-            <span key={`${index}_${value}_Bot`} className="ChatTextFromUser">
-              {message}
-            </span>
-            )
-          }
-            {payloadReceivedFlag
-            && (
-            <div key={`${index}_${value}_Bot`} className="ChatTextFromBotOpts">
-              {this.payloadResponse(message)}
-            </div>
-            )
-          }
-            {textReceivedFlag && !alert
-            && (
-            <span key={`${index}_${value}_User`} className="ChatTextFromBot">
-              {message}
-            </span>
-            )
-          }
-            {alert && <span key={`${index}_${value}_User`} className="ChatTextAlert">{message.content}</span>}
-          </div>
-        );
-      })
-    );
-  }
-
-  chatWindow() {
-    const { username } = this.props;
-    const { message } = this.state;
-    return (
-      <div className="ChatHolder">
-        <div className="ChatHolderHeader">
-          <div className="ChatImg">
-            <img alt="No ChatLogo" src={ChatLogo} />
-          </div>
-          <span className="ChatName">Pay Bot</span>
-        </div>
-        <div
-          ref={(chatLogHolder) => { this.chatLogHolder = chatLogHolder; }}
-          className="ChatLogHolder"
-        >
-          {this.chatlog()}
-        </div>
-        {/* {map(messages, (messageObject, key) => {
-          return (
-            <div key={key}>
-              <span>
-                {messageObject.sender && messageObject.sender.username}
-                {' : '}
-              </span>
-              <span>{messageObject.message}</span>
-            </div>
-          );
-        })} */}
-        <div className="ChatInput">
-          <div className="InputControls">
-            {username && (
-            <input
-              onChange={this.handleTextChange}
-              onKeyPress={this.handleKeyPress}
-              placeholder="Leave a message"
-              type="text"
-              value={message}
-            />
-            )}
-
-          </div>
-          <div className="AddOns">
-            <InsertEmoticon className="EmoticonButton" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render() {
+    const {
+      fetchBotResponse, sendMessage, unreadTexts, username, id, lastTransactionView, passwordResetView,
+    } = this.props;
+    const {
+      chatOpen, help, message, messages,
+    } = this.state;
     return (
-      <div className="ChatBot">
-        {this.state.chatOpen && this.chatWindow()}
-        <div className="ChatBotIconHolder">
-          <button
-            className="ChatButton"
-            onClick={() => {
-              this.setState({
-                chatOpen: !this.state.chatOpen,
-              });
-            }}
-          >
-            {this.state.chatOpen ? <ChatClose />
-              : (
-                <div>
-                  {this.props.unreadTexts > 0 && <span className="unread">{this.props.unreadTexts}</span>}
-                  <ChatIcon />
-                </div>
-              )}
-          </button>
+      <div>
+        <div className="Header">
+          <img alt="Mr. Cooper" className="MrCooperLogo" src={MrCooperLogo} />
+          <span>/ Paybot</span>
         </div>
+        <div className="Heading">
+          <span className="Title">{`Welcome ${username}`}</span>
+        </div>
+        <div className="MiscContainer">
+          {lastTransactionView && (
+            <Table
+              body={[{
+                posted: '01/02/2019',
+                effective: '12/31/2018',
+                description: 'PAYMENT',
+                total: '$1,903.14',
+                PI: '$1,368.15',
+                TI: '$534.99',
+                nextDue: '02/01/2019',
+              }]}
+              head={{
+                posted: 'POSTED',
+                effective: 'EFFECTIVE',
+                description: 'DESCRIPTION',
+                total: 'TOTAL',
+                PI: 'P&I',
+                TI: 'T&I',
+                nextDue: 'NEXT DUE',
+              }}
+              title="Last Transaction"
+            />
+          )}
+          {passwordResetView && (
+            <div>
+              <div>
+                <span>Loan #</span>
+                <input type="text" />
+              </div>
+              <div>
+                <span>SSN</span>
+                <input type="text" />
+              </div>
+              <div>
+                <span>DOB</span>
+                <input type="text" />
+              </div>
+              <div>
+                <span>Phone #</span>
+                <input type="text" />
+              </div>
+              <div>
+                <button>Reset Password Link</button>
+              </div>
+            </div>
+          )}
+        </div>
+        <Chat
+          fetchBotResponse={fetchBotResponse}
+          handleKeyPress={this.handleKeyPress}
+          handleMessageChange={this.handleTextChange}
+          help={help}
+          id={id}
+          message={message}
+          messages={messages}
+          open={chatOpen}
+          sendMessage={sendMessage}
+          toggleChat={() => {
+            this.setState({
+              chatOpen: !chatOpen,
+            });
+          }}
+          unreadTexts={unreadTexts}
+          userFlag
+          username={username}
+        />
       </div>
     );
   }
@@ -253,7 +180,9 @@ UserDashboard.propTypes = {
   help: PropTypes.bool,
   id: PropTypes.string,
   joinChat: PropTypes.func,
+  lastTransactionView: PropTypes.bool,
   messages: PropTypes.array, // eslint-disable-line
+  passwordResetView: PropTypes.bool,
   sendMessage: PropTypes.func,
   unreadTexts: PropTypes.number,
   username: PropTypes.string,

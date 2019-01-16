@@ -11,8 +11,6 @@ const mapStateToProps = (state) => {
     messagesLoaded: state.chatReducer.messagesLoaded,
     messages: state.chatReducer.messages,
     messagesError: state.chatReducer.messagesError,
-    lastTransactionView: state.miscReducer.lastTransactionView,
-    passwordResetView: state.miscReducer.passwordResetView,
   };
 };
 

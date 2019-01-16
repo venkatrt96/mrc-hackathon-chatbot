@@ -2,13 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
 import isEqual from 'lodash/isEqual';
-import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
-import ChatIcon from '@material-ui/icons/ChatBubble';
-import ChatClose from '@material-ui/icons/Close';
-import InsertEmoticon from '@material-ui/icons/InsertEmoticon';
 import { socket } from 'utils';
-import ChatLogo from 'images/ChatbotIcon.png';
+import Chat from 'components/common/Chat';
 
 class ServiceDashboard extends React.PureComponent {
   constructor() {
@@ -56,13 +51,15 @@ class ServiceDashboard extends React.PureComponent {
     });
   }
 
-  handleKeyPress(event, id, username) {
+  handleKeyPress(event) {
     const message = event.target.value;
+    const { receiverId } = this.state;
+    const { username, sendMessage } = this.props;
     if (isEqual(event.key, 'Enter') && !isEqual(message, '')) {
-      this.props.sendMessage({
+      sendMessage({
         sender: {
-          id,
-          username,
+          id: receiverId,
+          username: `SERVICER-${username}`,
         },
         message,
       });
@@ -75,108 +72,12 @@ class ServiceDashboard extends React.PureComponent {
     this.setState({ message });
   }
 
-  payloadResponse(id, reply) { // eslint-disable-line
-    const { payloadType, payloadContent } = reply; // eslint-disable-line
-    const options = map((payloadContent[payloadContent.kind].values), (option, index) => {
-      return (
-        <button
-          key={index}
-          disabled
-        >
-          {option[option.kind]}
-        </button>
-      );
-    });
-    return (
-      <div className="ChatTextFromBotOptsHolder">
-        {isEqual(payloadType[payloadType.kind], 'collection') && options}
-      </div>
-    );
-  }
-
-  chatlog() {
-    const { receiverId, messages } = this.state;
-    return (
-      map((messages), (value, index) => {
-        const { sender, message } = value;
-        const { username } = sender;
-        const userTextFlag = !isEqual(username, 'BOT') && !username.includes('SERVICER');
-        const payloadReceivedFlag = isEqual(username, 'BOT') && isObject(message);
-        const textReceivedFlag = (username.includes('SERVICER') || isEqual(username, 'BOT'))
-        && isString(message);
-        const alert = isObject(message) && message.type && isEqual(message.type, 'ALERT');
-        return (
-          <div key={index} className="ChatLog">
-            {userTextFlag
-            && (
-            <span key={`${index}_${value}_Bot`} className="ChatTextFromBot">
-              {message}
-            </span>
-            )
-          }
-            {payloadReceivedFlag
-            && (
-            <div key={`${index}_${value}_Bot`} className="ChatTextFromBotOpts ChatTextFromBotOptsInverse">
-              {this.payloadResponse(receiverId, message)}
-            </div>
-            )
-          }
-            {textReceivedFlag
-            && (
-            <span key={`${index}_${value}_User`} className="ChatTextFromUser">
-              {message}
-            </span>
-            )
-          }
-            {alert && <span key={`${index}_${value}_User`} className="ChatTextAlert">{message.content}</span>}
-          </div>
-        );
-      })
-    );
-  }
-
-  chatWindow() {
-    const { username } = this.props;
-    const { message, receiverId } = this.state;
-    return (
-      <div className="ChatHolder">
-        <div className="ChatHolderHeader">
-          <div className="ChatImg">
-            <img alt="No ChatLogo" src={ChatLogo} />
-          </div>
-          <span className="ChatName">Pay Bot</span>
-        </div>
-        <div
-          ref={(chatLogHolder) => { this.chatLogHolder = chatLogHolder; }}
-          className="ChatLogHolder"
-        >
-          {this.chatlog()}
-        </div>
-
-        <div className="ChatInput">
-          <div className="InputControls">
-            {username && (
-            <input
-              onChange={this.handleTextChange}
-              onKeyPress={e => this.handleKeyPress(e, receiverId, `SERVICER-${this.props.username}`)}
-              placeholder="Leave a message"
-              type="text"
-              value={message}
-            />
-            )}
-
-          </div>
-          <div className="AddOns">
-            <InsertEmoticon className="EmoticonButton" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     const {
-      users, receiverId,
+      sendMessage, unreadTexts, username, fetchMessages,
+    } = this.props;
+    const {
+      chatOpen, message, messages, users, receiverId,
     } = this.state;
     return (
       <div>
@@ -193,7 +94,7 @@ class ServiceDashboard extends React.PureComponent {
                   if (!isEqual(receiverId, user.id)) {
                     socket.emit('unsubscribe', receiverId);
                   }
-                  this.props.fetchMessages(user.id);
+                  fetchMessages(user.id);
 
                   this.setState({
                     receiverId: user.id,
@@ -204,14 +105,14 @@ class ServiceDashboard extends React.PureComponent {
                     this.setState({ messages: data });
                   });
 
-                  this.props.sendMessage({
+                  sendMessage({
                     sender: {
                       id: user.id,
-                      username: `SERVICER-${this.props.username}`,
+                      username: `SERVICER-${username}`,
                     },
                     message: {
                       type: 'ALERT',
-                      content: `******${this.props.username} has joined the chat******`,
+                      content: `******${username} has joined the chat******`,
                     },
                   });
                 }}
@@ -222,48 +123,24 @@ class ServiceDashboard extends React.PureComponent {
             );
           })}
         </div>
-        <div className="ChatBot">
-          {/* {receiverId && map(messages, (messageObject, key) => {
-            return (
-              <div key={key}>
-                <span>
-                  {messageObject.sender && messageObject.sender.username}
-                  {' : '}
-                </span>
-                <span>{messageObject.message}</span>
-              </div>
-            );
-          })} */}
-
-          {receiverId && this.state.chatOpen && this.chatWindow()}
-          {/* {receiverId && (
-          <input
-            onChange={this.handleTextChange}
-            onKeyPress={e => this.handleKeyPress(e, receiverId, `SERVICER-${this.props.username}`)}
-            placeholder="Leave a message"
-            type="text"
-            value={message}
-          />
-          )} */}
-          <div className="ChatBotIconHolder">
-            <button
-              className="ChatButton"
-              onClick={() => {
-                this.setState({
-                  chatOpen: !this.state.chatOpen,
-                });
-              }}
-            >
-              {this.state.chatOpen ? <ChatClose />
-                : (
-                  <div>
-                    {this.props.unreadTexts > 0 && <span className="unread">{this.props.unreadTexts}</span>}
-                    <ChatIcon />
-                  </div>
-                )}
-            </button>
-          </div>
-        </div>
+        <Chat
+          handleKeyPress={this.handleKeyPress}
+          handleMessageChange={this.handleTextChange}
+          help={false}
+          id={receiverId}
+          message={message}
+          messages={messages}
+          open={chatOpen}
+          sendMessage={sendMessage}
+          toggleChat={() => {
+            this.setState({
+              chatOpen: !chatOpen,
+            });
+          }}
+          unreadTexts={unreadTexts}
+          userFlag={false}
+          username={`SERVICER-${username}`}
+        />
       </div>
     );
   }

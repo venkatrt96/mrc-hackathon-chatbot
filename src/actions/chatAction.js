@@ -27,7 +27,6 @@ export const fetchMessages = (payload) => {
   return (dispatch) => {
     dispatch(fetchMessagesInit());
     axios.post('/api/chat/message/fetch', { id: payload }).then((res) => {
-      // socket.emit('message', res.data.messages);
       dispatch(fetchMessagesFulfilled(res.data));
     }).catch(() => {
       dispatch(errorMessagesFetching('Error Fetching Messages'));
@@ -46,7 +45,6 @@ export const fetchUsersFulfilled = (payload) => {
 export const fetchUsers = () => {
   return (dispatch) => {
     axios.get('/api/chat/users').then((res) => {
-      // socket.emit('updateUsers', res.data);
       dispatch(fetchUsersFulfilled(res.data));
     }).catch(() => {
       dispatch(displayAlert('Error Fetching Users', 'error'));
@@ -58,7 +56,6 @@ export const joinChat = (payload) => {
   return (dispatch) => {
     axios.post('/api/chat/join', payload).then((res) => {
       socket.emit('updateUsers', res.data);
-      // dispatch(displayAlert('Joining Chat', 'info'));
     }).catch(() => {
       dispatch(displayAlert('Error Joining Chat', 'error'));
     });
@@ -69,7 +66,6 @@ export const leaveChat = (payload) => {
   return (dispatch) => {
     axios.post('/api/chat/leave', payload).then((res) => { // eslint-disable-line      
       socket.emit('updateUsers', `${payload && payload.username} left the chat`);
-      // dispatch(displayAlert('Leaving Chat', 'info'));
     }).catch(() => {
       dispatch(displayAlert('Error Leaving Chat', 'error'));
     });
@@ -79,7 +75,6 @@ export const leaveChat = (payload) => {
 export const sendMessage = (payload) => {
   return (dispatch) => {
     axios.post('/api/chat/message', payload).then((res) => {
-      // socket.emit('message', res.data.messages);
       socket.emit('message', res.data.messages, payload.sender.id);
     }).catch(() => {
       dispatch(displayAlert('Error Sending Message', 'error'));

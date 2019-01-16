@@ -35,7 +35,6 @@ export const fetchBotResponse = (payload) => {
           username: 'BOT',
         },
         message: res.data.content,
-        // isEqual(res.data.type, 'text') ? res.data.content : JSON.stringify(res.data.content),
       }));
       if (res.data.action) {
         if (isEqual(res.data.action, 'last.transaction.history')) {

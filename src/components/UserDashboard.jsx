@@ -26,22 +26,13 @@ class UserDashboard extends React.PureComponent {
     if (this.props.id) {
       this.props.fetchMessages(this.props.id);
     }
-
-    // Trigger Dialogflow
-    this.props.fetchBotResponse({
-      sessionID: this.props.id,
-      userInput: 'Hi',
-    });
-    this.props.fetchBotResponse({
-      sessionID: this.props.id,
-      userInput: 'i have a Payment related Issue',
-    });
+    this.welcomeAction();
     this.updateSocket(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     this.updateSocket(nextProps);
-    this.updateState(nextProps);
+    // this.updateState(nextProps);
   }
 
   updateState(props) {
@@ -52,10 +43,24 @@ class UserDashboard extends React.PureComponent {
 
   updateSocket(payload) { // eslint-disable-line
     socket.emit('subscribe', payload.id);
-
     socket.on('send', (data) => {
       this.setState({ messages: data });
     });
+  }
+
+  welcomeAction() {
+    this.props.fetchBotResponse({
+      sessionID: this.props.id,
+      userInput: 'Hi',
+    });
+    this.props.fetchBotResponse({
+      sessionID: this.props.id,
+      userInput: 'i have a Payment related Issue',
+    });
+  }
+
+  clearMessage() {
+    this.setState({ message: '' });
   }
 
   handleKeyPress(event) {
@@ -75,7 +80,7 @@ class UserDashboard extends React.PureComponent {
           userInput: message,
         });
       }
-      this.setState({ message: '' });
+      this.clearMessage();
     }
   }
 
@@ -92,16 +97,17 @@ class UserDashboard extends React.PureComponent {
       chatOpen, help, message, messages,
     } = this.state;
     return (
-      <div>
+      <div className="container">
         <div className="Header">
           <img alt="Mr. Cooper" className="MrCooperLogo" src={MrCooperLogo} />
           <span>/ Paybot</span>
         </div>
-        <div className="Heading">
-          <span className="Title">{`Welcome ${username}`}</span>
-        </div>
-        <div className="MiscContainer">
-          {lastTransactionView && (
+        <div className="LogContainer">
+          <div className="Heading">
+            <span className="Title">{`Welcome ${username}`}</span>
+          </div>
+          <div className="MiscContainer">
+            {lastTransactionView && (
             <Table
               body={[{
                 posted: '01/02/2019',
@@ -123,50 +129,37 @@ class UserDashboard extends React.PureComponent {
               }}
               title="Last Transaction"
             />
-          )}
-          {passwordResetView && (
-            <div>
-              <div>
-                <span>Loan #</span>
-                <input type="text" />
-              </div>
-              <div>
-                <span>SSN</span>
-                <input type="text" />
-              </div>
-              <div>
-                <span>DOB</span>
-                <input type="text" />
-              </div>
-              <div>
-                <span>Phone #</span>
-                <input type="text" />
-              </div>
-              <div>
-                <button>Reset Password Link</button>
-              </div>
+            )}
+            {passwordResetView && (
+            <div className="Login">
+              <input placeholder="Loan #" type="text" />
+              <input placeholder="SSN" type="text" />
+              <input placeholder="DOB" type="text" />
+              <input placeholder="Phone #" type="text" />
+              <button>Reset Password Link</button>
             </div>
-          )}
+            )}
+          </div>
+          <Chat
+            fetchBotResponse={fetchBotResponse}
+            handleKeyPress={this.handleKeyPress}
+            handleMessageChange={this.handleTextChange}
+            help={help}
+            id={id}
+            message={message}
+            messages={messages}
+            open={chatOpen}
+            sendMessage={sendMessage}
+            toggleChat={() => {
+              this.setState({
+                chatOpen: !chatOpen,
+              });
+            }}
+            unreadTexts={unreadTexts}
+            userFlag
+            username={username}
+          />
         </div>
-        <Chat
-          fetchBotResponse={fetchBotResponse}
-          handleKeyPress={this.handleKeyPress}
-          handleMessageChange={this.handleTextChange}
-          help={help}
-          id={id}
-          message={message}
-          messages={messages}
-          open={chatOpen}
-          sendMessage={sendMessage}
-          toggleChat={() => {
-            this.setState({
-              chatOpen: !chatOpen,
-            });
-          }}
-          unreadTexts={unreadTexts}
-          userFlag
-          username={username}
-        />
       </div>
     );
   }

@@ -1,0 +1,221 @@
+.RowContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+
+    .AgentSideBar {
+        width: 80px;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        background: #004261;  
+        
+        .CLogo {
+            height: 50px;
+            width: 50px;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .ChatImage {
+            background: #063449;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4px 0;
+            cursor: pointer;
+            img {
+                height: 50px;
+                width: 50px;
+                padding: 10px;
+                box-sizing: border-box;                
+            }
+        }
+    }
+
+    .Tabs {
+        height: 80px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #53565a;
+        background: white;
+
+        .new {
+            background: #00b4d2;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .UserButton {
+            height: 100%;
+            width: 250px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-right: 1px solid #53565a;            
+            box-sizing: border-box;
+
+            span {
+                padding: 0 10px;
+            }
+
+            button {
+                height: 100%;
+                background: white;
+                padding: 0 10px;
+                color: #53565a;
+                border: 1px solid transparent;
+                outline: none;
+                cursor: pointer;
+            }
+            button:hover {
+                background: #53565a;
+                border: 1px solid black;
+                color: white;
+            }
+        }
+
+        .SearchAndProfile {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            input {
+                padding: 6px 10px;
+                margin: 0 10px;
+            }
+            img {
+                height: 50px;
+                width: 50px;
+                border: 1px solid #53565a;
+                border-radius: 50%;
+                margin: 0 10px;
+            }
+        }
+    }
+
+    .AgentView {
+        height: 100%;
+        width: 100%;
+        display: flex;  
+
+        .ChatContainer {  
+            height: 100%;          
+            background: white;            
+            box-sizing: border-box;
+
+            .AgentChat {
+                height: 100%;
+                .AgentChatHolder {
+                    height: 100%;      
+                    display: flex;
+                    flex-flow: column;                                  
+                    .AgentChatLogHolder {
+                        padding: 20px;
+                        overflow-y: scroll;
+                    }
+                }
+                .AgentChatInput {
+                    .InputControls {
+                        input {
+                            width: 100%;
+                            padding: 20px 10px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .UserDetails {
+            min-width: 300px;
+            border-left: 1px solid #53565a; 
+            background: white;
+            overflow-y: auto;
+
+            .UserProfile {            
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+                width: 100%;
+
+                .UserProfileImage {
+                    img {
+                        height: 96px;
+                        width: 96px;
+                        border: 1px solid transparent;
+                        border-radius: 50%;
+                    }
+                    padding: 10px 0;
+                }
+                .UserProfileData {
+                    .UserName {
+                        font-size: 18px;
+                        font-family: 'Lato', 'Regular';                        
+                    }
+                    .UserLocation {
+                        display: flex;
+                        justify-content: center;
+                        padding: 5px 0;
+                        span {
+                            font-size: 12px;
+                            font-family: 'Lato', 'Regular';                            
+                        }
+                    }
+                }
+            }
+
+            .UserPersonalData {
+                padding: 10px;
+                box-sizing: border-box;
+
+                .Data {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 5px 0;
+
+                    .Key {
+
+                    }
+                    .BlueValue {
+                        color: #00b4d2;
+                    }
+                    .Value {
+                        width: 132px;
+                    }
+                }
+            }
+
+            .UserLoanData {
+                padding: 10px;
+                box-sizing: border-box;
+                .Title {
+                    font-size: 12px;
+                    font-family: 'Lato', 'Bold'; 
+                }
+                .LoanDataContainer {
+                    display: flex;
+                    flex-flow: column;
+                    padding: 10px 0;
+
+                    .Key {
+                        font-size: 14px;
+                        font-family: 'Lato', 'Regular'; 
+                    }
+                    .BlueValue {
+                        color: #00b4d2;
+                        font-size: 18px;
+                        font-family: 'Lato', 'Semibold'; 
+                    }
+                    .DarkBlueValue {
+                        color: #004261;
+                        font-size: 18px;
+                        font-family: 'Lato', 'Semibold'; 
+                    }
+                }
+            }
+        }
+    }
+
+}

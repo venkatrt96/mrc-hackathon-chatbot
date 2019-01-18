@@ -27,15 +27,10 @@ class Dashboard extends React.PureComponent {
       email, name, groupName,
     } = this.props;
     return (
-      <div className="container">
-        <div className="LogContainer">
-          {isEqual(groupName, 'SERVICE')
-          && email && name && this.state.socketConnected
-          && (<ServiceDashboardContainer />)}
-          {isEqual(groupName, 'USER')
-          && email && name && this.state.socketConnected
-          && (<UserDashboardContainer />)}
-        </div>
+      <div className="DashboardContainer">
+        {isEqual(groupName, 'SERVICE') && email && name && this.state.socketConnected
+        && (<ServiceDashboardContainer />)}
+        {isEqual(groupName, 'USER') && email && name && this.state.socketConnected && (<UserDashboardContainer />)}
         <AlertContainer />
       </div>
     );

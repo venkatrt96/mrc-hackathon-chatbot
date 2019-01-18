@@ -4,6 +4,7 @@
 @import './components/Alert';
 @import './components/DarkOverlay.scss';
 @import './components/Chat.scss';
+@import './components/AgentChat.scss';
 
 html, body, #app {
     height: 100%;
@@ -12,91 +13,193 @@ html, body, #app {
     padding: 0;
 }
 
-.container {
-    display: flex;
-    flex-flow: column;
+.DashboardContainer {
     height: 100%;
-    width: 100%;    
-    position: relative;   
-    .Header {
-        display: flex;
-        align-items: center;
-        height: 60px;
-        background: #00b4d2;
-        color: white;
-        padding: 15px 10px;
-        box-sizing: border-box;
-        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, .1);
-        .MrCooperLogo {
-            height: 38px;
-            padding: 0 7px 0 31px;
-        }
-        span {
-            font-family: 'Lato', 'Regular';
-            font-size: 20px;
-        }
-    }
+    width: 100%;  
 
-    .LogContainer {
-        height: 100%;
-        width: 100%;
-        min-height: 0;
+    .container {
         display: flex;
         flex-flow: column;
-        // align-items: center;
-        background: #F3F2F7;
-        overflow-y: auto;
-        overflow-x: hidden;
-        position: relative; 
-
-        .Heading {
-            display: flex;
-            flex-flow: wrap;
-            justify-content: space-between;
-            align-items: baseline;
-            margin: 15px 42px;          
-            span {
-                line-height: 26px;
-            }
-            .Title {
-                font-family: 'Lato', 'Medium';
-                color: #00b4d2;
-                font-size: 20px;
-            }        
-        }
-
-        .BlocksHolder {
-            display: flex;
-            flex-wrap: wrap;
-        }
-    
-        .LoaderHolder {
-            height: 100px;
-            width: 100%;
+        height: 100%;
+        width: 100%;    
+        position: relative;   
+        .Header {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        .ActiveUsersHolder {
-            width: 100%;
+            height: 60px;
+            background: #00b4d2;
+            color: white;
+            padding: 15px 10px;
             box-sizing: border-box;
-            padding: 10px 42px;
-
-            .ActiveUsersHeading {
-                font-family: 'Lato', 'Regular';
-                padding: 10px 0;
+            box-shadow: 0 3px 5px 0 rgba(0, 0, 0, .1);
+            .MrCooperLogo {
+                height: 38px;
+                padding: 0 7px 0 31px;
             }
-            .ActiveUsers {
-                display: flex;
-                justify-content: space-between;
-                width: 500px;
-                padding: 10px 0;
+            span {
+                font-family: 'Lato', 'Regular';
+                font-size: 20px;
             }
         }
-    }    
+    
+        .LogContainer {
+            height: 100%;
+            width: 100%;
+            min-height: 0;
+            display: flex;
+            flex-flow: column;
+            background: #F3F2F7;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative; 
+    
+            .Heading {
+                display: flex;
+                flex-flow: wrap;
+                justify-content: space-between;
+                align-items: baseline;
+                margin: 15px 42px;          
+                span {
+                    line-height: 26px;
+                }
+                .Title {
+                    font-family: 'Lato', 'Medium';
+                    color: #00b4d2;
+                    font-size: 20px;
+                }        
+            }
+    
+            .BlocksHolder {
+                display: flex;
+                flex-wrap: wrap;
+            }
+        
+            .LoaderHolder {
+                height: 100px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .AdminPanel {
+                height: 100%;
+                display: flex;
+
+                .ChatsTags {
+                    width: 250px;
+                    border-right: 1px solid #6E6E6E;
+                    background: white;
+
+                    .ChatsTagsHolder {
+                        padding: 15px;
+                        box-sizing: border-box;
+
+                        .AdminPanelHeading {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 10px 0;
+                            .Title {
+                                color: #00b4d2;
+                                font-size: 18px;
+                                font-family: 'Lato', 'Regular';
+                            }
+                            .Count {
+                                border-radius: 50%;
+                                padding: 2px 8px;
+                                color: white;
+                                font-size: 14px;
+                                background: #00b4d2;
+                            }
+                        }
+                        .AdminPanelSubMenu {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 8px 0;
+                            .Title {
+                                font-size: 14px;
+                                font-family: 'Lato', 'Semibold';
+                            }
+                            .Count {
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+
+                .ActiveUsersHolder {
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: 10px 42px;
+        
+                    .ActiveUsersHeading {
+                        font-family: 'Lato', 'Regular';
+                        padding: 10px 0;
+                    }
+                    .ActiveUsers {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 500px;
+                        padding: 10px 0;
+                    }
+                    .UsersTable {
+                        width: 100%;
+                        thead {
+                            tr {
+                                th {
+                                    padding: 10px 30px;
+                                    box-sizing: border-box;
+                                    text-align: left;
+                                    color: #6E6E6E;
+                                    text-transform: uppercase;
+                                    font-size: 12px;
+                                    font-family: 'Lato', 'Bold';
+                                }
+                            }
+                        }
+    
+                        tbody {
+                            tr {                            
+                                border: 1px solid #dcdcdf;
+                                border-radius: 5px;
+                                background: rgba(220, 220, 223, .9);
+                                cursor: pointer;
+    
+                                td {
+                                    padding: 10px 30px;
+                                    box-sizing: border-box;
+                                    font-size: 15px;
+                                    font-family: 'Lato', 'Semibold';
+                                }
+                            }
+                            tr:hover {
+                                background: rgba(220, 220, 223, .4);
+                            }
+                        }
+                    }
+                }
+            }
+        }    
+    }
 }
 
 .MiscContainer {
     margin: 15px 42px;
+    .Login {
+        display: flex;
+        flex-flow: column;
+        input {
+            width: 250px;
+            padding: 10px;
+            margin: 2px 0;
+        }
+        button {
+            padding: 10px;
+            width: 275px;
+            border: 1px solid white;
+            cursor: pointer;
+            color: white;
+            background: #004261;
+        }
+    }
 }

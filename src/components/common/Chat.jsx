@@ -58,6 +58,47 @@ class Chat extends React.PureComponent {
     );
   }
 
+  getLink(line) { // eslint-disable-line
+    if (line.search('http')) {
+      const expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/; // eslint-disable-line
+      const regex = new RegExp(expression);
+      const link = line.match(regex) && line.match(regex)[0];
+      const words = line.split(' ');
+      return map(words, (word, key) => {
+        if (isEqual(word, link)) {
+          return (
+            <a
+              key={key}
+              href={link}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {link}
+            </a>
+          );
+        }
+        return `${word} `;
+      });
+    }
+    return line;
+  }
+
+  getMessage(message) { // eslint-disable-line
+    if (message.search('<br>')) {
+      const lines = message.split('<br>');
+      return map(lines, (line, key) => {
+        return (
+          <span key={key}>
+            {!line.search('http') && line}
+            {line.search('http') && this.getLink(line)}
+            <br />
+          </span>
+        );
+      });
+    }
+    return message;
+  }
+
   chatlog() {
     const { messages, userFlag } = this.props;
     return (
@@ -77,7 +118,7 @@ class Chat extends React.PureComponent {
               key={`${index}_${value}_Bot`}
               className={userFlag ? 'ChatTextFromUser' : 'ChatTextFromBot'}
             >
-              {message}
+              {this.getMessage(message)}
             </span>
             )
           }
@@ -97,7 +138,7 @@ class Chat extends React.PureComponent {
               key={`${index}_${value}_User`}
               className={userFlag ? 'ChatTextFromBot' : 'ChatTextFromUser'}
             >
-              {message}
+              {this.getMessage(message)}
             </span>
             )
           }
